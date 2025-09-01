@@ -4,9 +4,6 @@ import path from "node:path"
 import { fileURLToPath } from 'url'
 import { copyFileSync } from "node:fs"
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
 const app = express()
 
 function currentDate() {
@@ -60,18 +57,19 @@ let createArticle = (req, res, next) => {
         article: article,
         date: currentDate()
     }
-
-    res.end()
+    console.log(newArticle)
+    res.redirect('/home')
 }
 
 // PUT /edit/id
-// edit article
+// edit blog
 let updateArticle = (req, res, next) => {
     let id = req.params.id
     let newTitle = req.body.title
     let newArticle = req.body.article
     let articleToUpdate = blogs.find(article => article.id == id)
 
+    console.log("herer")
     if(!article) {
         let error = new Error(`article with id: ${id} not found.`)
         error.status = 404 
@@ -83,7 +81,8 @@ let updateArticle = (req, res, next) => {
         articleToUpdate.article = newArticle
     }
 
-    res.end()
+    console.log(articleToUpdate)
+    res.redirect('/home')
 }
 
 // DELETE /id
@@ -105,4 +104,24 @@ let deleteArticle = (req, res, next) => {
     res.end()
 }
 
-export {getAllBlogs, getOneArticle, createArticle, updateArticle, deleteArticle}
+// GET /edit/id
+// editing blog form
+let showEditForm = (req, res, next) => {
+    let id = req.params.id
+    let blogToEdit = blogs.find(blog => blog.id == id)
+
+    if(!blogToEdit){
+        let error = new Error(`Can't find blogs with id: ${id}`)
+        error.status = 404
+        next(error)
+        return
+    }
+
+    res.render("index", {
+        id: id,
+        title: blogToEdit.title,
+        article: blogToEdit.article
+    })
+}
+
+export {getAllBlogs, getOneArticle, createArticle, updateArticle, deleteArticle, showEditForm}

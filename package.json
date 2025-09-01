@@ -21,6 +21,8 @@
   "homepage": "https://github.com/hussainazz/personal-blog#readme",
   "dependencies": {
     "colors": "^1.4.0",
-    "express": "^5.1.0"
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "method-override": "^3.0.0"
   }
 }

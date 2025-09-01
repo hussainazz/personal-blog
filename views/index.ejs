@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Article</title>
+</head>
+<body>
+    <form method="post" action="/edit/<%=id%>" id="edit-article-form">
+        <input type="hidden" name="_method" value="PUT" />
+        <lablel for="title">Title:</label>
+        <input name="title" value="<%=title%>"/>
+        <label for="article">Article:</label>
+        <textarea name="article"><%=article%></textarea>
+        <button id="edit-article-btn">Submit</button>
+    </form>
+</body>
+</html>

@@ -3,7 +3,9 @@ import path from "node:path"
 import { fileURLToPath } from 'url'
 import { logger } from "./middleware/logger.js"
 import { errorHandler } from "./middleware/errorhandler.js"
-import {createArticle, updateArticle, getAllBlogs, getOneArticle, deleteArticle} from "./controller/blogsController.js"
+import {createArticle, updateArticle, getAllBlogs, getOneArticle, deleteArticle, showEditForm} from "./controller/blogsController.js"
+import methodOverride from "method-override"
+import ejs from "ejs"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -14,13 +16,19 @@ app.listen(3000, () => console.log("Server running on port 3000"))
 app.use('/new', express.static(path.join(__dirname, "public", "new")))
 app.use("/home", express.static(path.join(__dirname, "public", "home")))
 
-app.use(logger)
+app.set("view engine", "ejs")
+app.set("views")
+
 app.use(express.json())
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: true  }))
+app.use(methodOverride("_method", (req, res) => {
+    console.log("Method override triggered", req.body);
+}));
+app.use(logger)
 
 // GET /home
 // get all blogs
-app.get("/home", getAllBlogs )
+app.get("/api/home", getAllBlogs )
 
 // GET /article/:id
 // get one blog
@@ -32,6 +40,10 @@ app.post("/new", createArticle)
 // PUT /edit/2
 // update an article
 app.put("/edit/:id", updateArticle)
+
+// GET /edit
+// get the form to edit
+app.get("/edit/:id", showEditForm)
 
 // DELETE delete/id
 // remove an article

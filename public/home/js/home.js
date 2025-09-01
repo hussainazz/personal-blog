@@ -1,16 +1,15 @@
-let blogsList = document.querySelector("#blogs-list")
 
 name()
 async function name() {
     
-    let res = await fetch("http://localhost:3000/home", {
-        method: "GET",
-        headers: {
-            "Content-Type" : "application/json"
-        }
-        body
-    })
-    let final = await res.json()
-
-    console.log(final[0])
+    let res = await fetch("http://localhost:3000/api/home")
+    let blogs = await res.json()
+    
+    let blogsList = document.querySelector("#blogs-list")
+    
+    blogs.forEach(element => {
+        const li = document.createElement('li');
+        li.textContent = element.title;
+        blogsList.appendChild(li);
+    });
 }
