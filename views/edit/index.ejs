@@ -6,9 +6,8 @@
     <title>Edit Article</title>
 </head>
 <body>
-    <form method="post" action="/edit/<%=id%>" id="edit-article-form">
-        <input type="hidden" name="_method" value="PUT" />
-        <lablel for="title">Title:</label>
+    <form method="post" action="/edit/<%=id%>?_method=PUT" id="edit-article-form">
+        <label for="title">Title:</label>
         <input name="title" value="<%=title%>"/>
         <label for="article">Article:</label>
         <textarea name="article"><%=article%></textarea>

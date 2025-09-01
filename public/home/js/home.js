@@ -1,7 +1,4 @@
-
-name()
-async function name() {
-    
+(async function name() {
     let res = await fetch("http://localhost:3000/api/home")
     let blogs = await res.json()
     
@@ -12,4 +9,4 @@ async function name() {
         li.textContent = element.title;
         blogsList.appendChild(li);
     });
-}
+})()

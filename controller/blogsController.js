@@ -1,10 +1,4 @@
-import express from "express"
 import blogs from "../blogs/blogs.js"
-import path from "node:path"
-import { fileURLToPath } from 'url'
-import { copyFileSync } from "node:fs"
-
-const app = express()
 
 function currentDate() {
     const today = new Date()
@@ -27,15 +21,19 @@ let getAllBlogs = (req, res, next) => {
 // get one article
 let getOneArticle = (req, res, next) => {
     let id = req.params.id
-    let article = blogs.find(article => article.id == id)
+    let blog = blogs.find(article => article.id == id)
 
-    if(!article) {
-        let error = new Error(`article with id: ${id} not found.`)
-        error.status = 404 
+    if(!blog) {
+        let error = new Error(`blog with id: ${id} not found.`)
+        error.status = 404
         next(error)
     }
-    res.status(200).json(article)
-    res.end()
+    
+    res.render("./article/index", {
+        title: blog.title,
+        publishDate: blog.date,
+        article: blog.article
+    })
 }
 
 // POST /new
@@ -57,7 +55,7 @@ let createArticle = (req, res, next) => {
         article: article,
         date: currentDate()
     }
-    console.log(newArticle)
+    blogs.push(newArticle)
     res.redirect('/home')
 }
 
@@ -69,19 +67,19 @@ let updateArticle = (req, res, next) => {
     let newArticle = req.body.article
     let articleToUpdate = blogs.find(article => article.id == id)
 
-    console.log("herer")
-    if(!article) {
+    if(!articleToUpdate) {
         let error = new Error(`article with id: ${id} not found.`)
         error.status = 404 
         next(error)
     }
 
-    if (articleToUpdate) {
-        articleToUpdate.title = newTitle
-        articleToUpdate.article = newArticle
-    }
+    articleToUpdate.title = newTitle
+    articleToUpdate.article = newArticle
 
-    console.log(articleToUpdate)
+    blogs.find(blog => blog.id == id)["title"] = newTitle
+    blogs.find(blog => blog.id == id)["article"] = newArticle
+
+    console.log(blogs)
     res.redirect('/home')
 }
 
@@ -117,7 +115,7 @@ let showEditForm = (req, res, next) => {
         return
     }
 
-    res.render("index", {
+    res.render("./edit/index", {
         id: id,
         title: blogToEdit.title,
         article: blogToEdit.article
