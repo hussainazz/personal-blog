@@ -1,139 +1,150 @@
-import blogs from "../blogs/blogs.js"
+import fs from "node:fs";
+
+let blogs;
+
+try {
+    blogs = JSON.parse(fs.readFileSync("./db/blogs.json"));
+} catch {
+    blogs = [];
+}
 
 function currentDate() {
-    const today = new Date()
+    const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() + 1;
     const day = today.getDate();
-    const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
-    return formattedDate
+    const formattedDate = `${year}-${month < 10 ? "0" : ""}${month}-${
+        day < 10 ? "0" : ""
+    }${day}`;
+    return formattedDate;
+}
+
+function writeFile() {
+    fs.writeFileSync("./db/blogs.json", JSON.stringify(blogs));
 }
 
 // GET /api/home
-// get all blogs in json
-let getAllBlogsJson = (req, res, next) => {
-    res.status(200).json(blogs)
-    res.end()
-    next()
-}
+let getAllBlogs = (req, res, next) => {
+    res.status(200).json(blogs);
+    res.end();
+    next();
+};
 
 // GET /home
-// render blogs
 let renderAllBlogs = (req, res, next) => {
-    let blogsTitles = blogs.map(blog => blog.title)
-
-    let blogsTitlesEl = blogsTitles.map(title => 
-        `<li>${title}</li>`
-    )
-
+    let blogListEl = blogs.map((blog) => {
+        return `<li>${blog.title}</li><span>${blog.date}</span>`;
+    });
     res.render("./home/index", {
-        blogList: blogsTitlesEl
-    })
-}
+        blogList: blogListEl,
+    });
+};
 
 // GET /article/id
-// get one article
-let getOneArticle = (req, res, next) => {
-    let id = req.params.id
-    let blog = blogs.find(article => article.id == id)
+let renderOneBlog = (req, res, next) => {
+    let id = req.params.id;
+    let blog = blogs.find((article) => article.id == id);
 
-    if(!blog) {
-        let error = new Error(`blog with id: ${id} not found.`)
-        error.status = 404
-        next(error)
+    if (!blog) {
+        let error = new Error(`Can't find blog with id: ${id}.`);
+        error.status = 404;
+        next(error);
     }
-    
+
     res.render("./article/index", {
         title: blog.title,
         publishDate: blog.date,
-        article: blog.article
-    })
-}
+        article: blog.article,
+    });
+};
 
 // POST /new
-// Create blog
-let createArticle = (req, res, next) => {
-    let newId = blogs.length + 1
-    let title = req.body.title
-    let article = req.body.article
-    
-    if(!title){
-        let error = new Error("You should include a title.")
-        error.status = 400
-        next(error)
+let createBlog = (req, res, next) => {
+    let newId = blogs.length + 1;
+    let title = req.body.title;
+    let article = req.body.article;
+
+    if (newId === blogs.length) {
+        newId++;
+    }
+
+    if (!title) {
+        let error = new Error("You should include a title.");
+        error.status = 400;
+        next(error);
     }
 
     let newArticle = {
         id: newId,
         title: title,
         article: article,
-        date: currentDate()
-    }
-    blogs.push(newArticle)
-    res.redirect('/home')
-}
+        date: currentDate(),
+    };
+    blogs.push(newArticle);
+    writeFile();
+    res.redirect("/admin");
+};
 
 // PUT /edit/id
-// edit blog
-let updateArticle = (req, res, next) => {
-    let id = req.params.id
-    let newTitle = req.body.title
-    let newArticle = req.body.article
-    let articleToUpdate = blogs.find(article => article.id == id)
+let editBlog = (req, res, next) => {
+    let id = req.params.id;
+    let newTitle = req.body.title;
+    let newArticle = req.body.article;
+    let articleToUpdate = blogs.find((article) => article.id == id);
 
-    if(!articleToUpdate) {
-        let error = new Error(`article with id: ${id} not found.`)
-        error.status = 404 
-        next(error)
+    if (!articleToUpdate) {
+        let error = new Error(`article with id: ${id} not found.`);
+        error.status = 404;
+        next(error);
     }
 
-    articleToUpdate.title = newTitle
-    articleToUpdate.article = newArticle
+    blogs.find((blog) => blog.id == id)["title"] = newTitle;
+    blogs.find((blog) => blog.id == id)["article"] = newArticle;
+    writeFile();
+    res.redirect("/admin");
+};
 
-    blogs.find(blog => blog.id == id)["title"] = newTitle
-    blogs.find(blog => blog.id == id)["article"] = newArticle
+// DELETE /delete/id
+let deleteBlog = (req, res, next) => {
+    let id = req.params.id;
+    let articleToDelete = blogs.find((article) => article.id == id);
 
-    console.log(blogs)
-    res.redirect('/home')
-}
-
-// DELETE /id
-// delete a blog
-let deleteArticle = (req, res, next) => {
-    let id = req.params.id
-    let articleToDelete = blogs.find(article => article.id == id)
-
-    if(!articleToDelete) {
-        let error = new Error(`article with id: ${id} not found.`)
-        error.status = 404
-        next(error)
+    if (!articleToDelete) {
+        let error = new Error(`article with id: ${id} not found.`);
+        error.status = 404;
+        next(error);
     }
 
-    let newBlogs = blogs.filter(article => article.id != id)
-    if(newBlogs.length < blogs) {
-        console.log("blog removed successfully.")
-    }
-    res.end()
-}
+    blogs = blogs.filter((article) => article.id != id);
+    writeFile();
+    res.end();
+};
 
 // GET /edit/id
-// editing blog form
-let showEditForm = (req, res, next) => {
-    let id = req.params.id
-    let blogToEdit = blogs.find(blog => blog.id == id)
+let renderEditForm = (req, res, next) => {
+    let id = req.params.id;
+    let blogToEdit = blogs.find((blog) => blog.id == id);
 
-    if(!blogToEdit){
-        let error = new Error(`Can't find blogs with id: ${id}`)
-        error.status = 404
-        next(error)
-        return
+    if (!blogToEdit) {
+        let error = new Error(`Can't find blogs with id: ${id}`);
+        error.status = 404;
+        next(error);
+        return;
     }
 
     res.render("./edit/index", {
         id: id,
         title: blogToEdit.title,
-        article: blogToEdit.article
-    })
-}
+        article: blogToEdit.article,
+    });
+};
 
-export {getAllBlogsJson, getOneArticle, createArticle, updateArticle, deleteArticle, showEditForm, renderAllBlogs}
+export {
+    getAllBlogs,
+    renderOneBlog,
+    createBlog,
+    editBlog,
+    deleteBlog,
+    renderEditForm,
+    renderAllBlogs,
+};

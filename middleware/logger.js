@@ -12,4 +12,4 @@ let logger = (req, res, next) => {
     next()
 }
 
-export {logger}
+export default logger
