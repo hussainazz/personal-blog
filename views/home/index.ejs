@@ -8,8 +8,10 @@
 <body>
     <section id="blogs-section">
         <ul id="blogs-list">
+            <% blogList.forEach(item => { %>
+                <%- item %>
+            <% }) %>
         </ul>
     </section>
-    <script src="./js/home.js"></script>
 </body>
 </html>

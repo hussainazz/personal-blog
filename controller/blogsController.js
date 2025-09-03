@@ -9,12 +9,26 @@ function currentDate() {
     return formattedDate
 }
 
-// GET /home
-// get all blogs
-let getAllBlogs = (req, res, next) => {
+// GET /api/home
+// get all blogs in json
+let getAllBlogsJson = (req, res, next) => {
     res.status(200).json(blogs)
     res.end()
     next()
+}
+
+// GET /home
+// render blogs
+let renderAllBlogs = (req, res, next) => {
+    let blogsTitles = blogs.map(blog => blog.title)
+
+    let blogsTitlesEl = blogsTitles.map(title => 
+        `<li>${title}</li>`
+    )
+
+    res.render("./home/index", {
+        blogList: blogsTitlesEl
+    })
 }
 
 // GET /article/id
@@ -122,4 +136,4 @@ let showEditForm = (req, res, next) => {
     })
 }
 
-export {getAllBlogs, getOneArticle, createArticle, updateArticle, deleteArticle, showEditForm}
+export {getAllBlogsJson, getOneArticle, createArticle, updateArticle, deleteArticle, showEditForm, renderAllBlogs}

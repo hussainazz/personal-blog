@@ -3,7 +3,7 @@ import path from "node:path"
 import { fileURLToPath } from 'url'
 import { logger } from "./middleware/logger.js"
 import { errorHandler } from "./middleware/errorhandler.js"
-import {createArticle, updateArticle, getAllBlogs, getOneArticle, deleteArticle, showEditForm} from "./controller/blogsController.js"
+import {createArticle, updateArticle, getAllBlogsJson, getOneArticle, deleteArticle, showEditForm, renderAllBlogs} from "./controller/blogsController.js"
 import methodOverride from "method-override"
 import ejs from "ejs"
 
@@ -23,9 +23,13 @@ app.use(express.urlencoded({ extended: false  }))
 app.use(methodOverride("_method"))
 app.use(logger)
 
-// GET /home
+// GET /api/home
 // get all blogs
-app.get("/api/home", getAllBlogs )
+app.get("/api/home", getAllBlogsJson )
+
+// GET /home
+// render blogs
+app.get("/home", renderAllBlogs)
 
 // GET /article/:id
 // get one blog
