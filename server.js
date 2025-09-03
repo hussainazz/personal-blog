@@ -25,8 +25,6 @@ app.listen(3000, () => console.log("Server running on port 3000"));
 app.set("view engine", "ejs");
 app.set("views");
 
-app.use("/css", express.static(path.join(__dirname, "public", "css")));
-
 app.use(
     "/new",
     basicAuth,

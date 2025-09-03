@@ -1,16 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../css/style.css">
-</head>
-<body>
-    <section>
-        <ul id="blogsList">
-        </ul>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Blogs</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            .blog-entry-container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem;
+                background-color: #f9fafb;
+                border-radius: 0.5rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            .blog-entry-container li {
+                list-style: none; /* Removes the default list bullet */
+                margin: 0;
+                padding: 0;
+                font-size: 1.125rem;
+                font-weight: 600;
+                color: #1f2937;
+            }
+
+            .blog-actions {
+                display: flex;
+                gap: 0.5rem;
+            }
+
+            .blog-actions button {
+                background: none;
+                border: none;
+                color: #60a5fa;
+                font-weight: 500;
+                cursor: pointer;
+                transition: color 0.2s ease-in-out;
+            }
+            .blog-actions button:hover {
+                color: #3b82f6;
+            }
+        </style>
+    </head>
+    <body class="bg-gray-100 flex justify-center items-center min-h-screen p-4">
+        <section class="w-full max-w-2xl bg-white p-6 rounded-lg shadow-lg">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-gray-800">Personal Blog</h1>
+                <button
+                    id="new-blog-btn"
+                    class="bg-blue-600 text-white py-2 px-4 rounded-md font-semibold hover:bg-blue-700 transition duration-300 ease-in-out"
+                    onclick="window.location.href='/new'"
+                >
+                    New Blog
+                </button>
+            </div>
+            <ul id="blogsList" class="space-y-4"></ul>
+        </section>
         <script src="./js/admin.js"></script>
-    </section>
-</body>
+    </body>
 </html>

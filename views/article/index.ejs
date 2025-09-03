@@ -4,11 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Article</title>
-    <link rel="stylesheet" href="../../public/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
-<body>
-    <h1 id="title"><%=title%></h1>
-    <span id="publish-date"><%=publishDate%></span>
-    <p id="article"><%=article%></p>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen p-4">
+    <section class="w-full max-w-2xl bg-white p-6 rounded-lg shadow-lg">
+        <h1 id="title" class="text-3xl font-bold text-gray-800 mb-2"><%=title%></h1>
+        <span id="publish-date" class="text-sm text-gray-500 block mb-6"><%=publishDate%></span>
+        <p id="article" class="text-base text-gray-700 leading-relaxed"><%=article%></p>
+    </section>
 </body>
 </html>

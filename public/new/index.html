@@ -3,16 +3,63 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
-        <link rel="stylesheet" href="/css/style.css"/>
+        <title>New Article</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            body {
+                font-family: "Inter", sans-serif;
+                background-color: #f3f4f6;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                margin: 0;
+            }
+        </style>
     </head>
     <body>
-        <form method="post" action="/new" id="new-article-form">
-            <label for="title">Title:</label>
-            <input name="title" placeholder="Title" />
-            <label for="article">Article:</label>
-            <textarea name="article" placeholder="Write..."></textarea>
-            <button id="new-article-btn">Submit</button>
-        </form>
+        <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+            <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">
+                New Article
+            </h1>
+            <form
+                method="post"
+                action="/new"
+                id="new-article-form"
+                class="space-y-4"
+            >
+                <div class="flex flex-col">
+                    <label
+                        for="title"
+                        class="text-sm font-medium text-gray-700 mb-1"
+                        >Title:</label
+                    >
+                    <input
+                        name="title"
+                        placeholder="Title"
+                        class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                </div>
+                <div class="flex flex-col">
+                    <label
+                        for="article"
+                        class="text-sm font-medium text-gray-700 mb-1"
+                        >Article:</label
+                    >
+                    <textarea
+                        name="article"
+                        placeholder="Write..."
+                        rows="10"
+                        class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    ></textarea>
+                </div>
+                <button
+                    id="new-article-btn"
+                    class="w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition duration-300 ease-in-out"
+                >
+                    Submit
+                </button>
+            </form>
+        </div>
     </body>
 </html>

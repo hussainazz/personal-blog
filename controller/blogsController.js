@@ -32,11 +32,9 @@ let getAllBlogs = (req, res, next) => {
 
 // GET /home
 let renderAllBlogs = (req, res, next) => {
-    let blogListEl = blogs.map((blog) => {
-        return `<li>${blog.title}</li><span>${blog.date}</span>`;
-    });
+
     res.render("./home/index", {
-        blogList: blogListEl,
+        blogList: blogs
     });
 };
 
@@ -44,13 +42,11 @@ let renderAllBlogs = (req, res, next) => {
 let renderOneBlog = (req, res, next) => {
     let id = req.params.id;
     let blog = blogs.find((article) => article.id == id);
-
     if (!blog) {
         let error = new Error(`Can't find blog with id: ${id}.`);
         error.status = 404;
         next(error);
     }
-
     res.render("./article/index", {
         title: blog.title,
         publishDate: blog.date,

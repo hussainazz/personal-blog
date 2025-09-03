@@ -5,7 +5,15 @@ async function listEl() {
     blogs = await getBlogs();
     let titleEl = blogs.map(
         (blog) =>
-            `<div><li>${blog.title}</li><button id="edit_${blog.id}" onclick="editBtn_eventListener(${blog.id})">Edit</button><button id="delete_${blog.id}" onclick="deleteBtn_eventListener(${blog.id})">Delete</button></div>`
+            `
+            <div class="blog-entry-container">
+                <li>${blog.title}</li>
+                <div class="blog-actions">
+                    <button id="edit_${blog.id}" onclick="editBtn_eventListener(${blog.id})">Edit</button>
+                    <button id="delete_${blog.id}" onclick="deleteBtn_eventListener(${blog.id})">Delete</button>
+                </div>
+            </div>
+            `
     );
     titleList_ul.innerHTML = titleEl.join("");
     async function getBlogs() {
