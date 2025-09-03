@@ -1,8 +1,8 @@
-let errorHandler = (error, req, res, next) => {
-    let statusCode = error.status || 500
-    res.status(statusCode).send(error.message)
-    if(statusCode == 500) {
-        console.error(`something went wrong: ${error.message}`)
+let errorHandler = (err, req, res, next) => {
+    if(err.status) {
+        res.status(err.status).send(err.message )
+    } else {
+        res.status(500).json(err.message)
     }
 }
 
