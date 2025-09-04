@@ -1,7 +1,7 @@
 let basicAuth = (req, res, next) => {
     let authHeader = req.headers["authorization"];
 
-    if (!authHeader || !authHeader.startsWith("Basic ")) {
+    if (!authHeader) {
         res.setHeader("WWW-Authenticate", "Basic");
         return res.status(401).send("Authentication Required");
     }

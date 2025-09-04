@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "url";
 import logger from "./middleware/logger.js";
 import errorHandler from "./middleware/errorhandler.js";
-import notFound from "./middleware/notFound.js"
+import notFound from "./middleware/notFound.js";
 import basicAuth from "./auth/basicAuth.js";
 import methodOverride from "method-override";
 import ejs from "ejs";
@@ -31,13 +31,13 @@ app.use(
     basicAuth,
     express.static(path.join(__dirname, "public", "new"))
 );
-app.use("/home", express.static(path.join(__dirname, "public", "home")));
 app.use(
     "/admin",
     basicAuth,
     express.static(path.join(__dirname, "public", "admin"))
 );
 app.use("/edit/:id", basicAuth);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride("_method"));
@@ -66,5 +66,5 @@ app.put("/edit/:id", editBlog);
 app.delete("/delete/:id", deleteBlog);
 
 // error handler
-app.use(notFound)
+app.use(notFound);
 app.use(errorHandler);

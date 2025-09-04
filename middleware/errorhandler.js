@@ -1,9 +1,5 @@
-let errorHandler = (err, req, res, next) => {
-    if(err.status) {
-        res.status(err.status).send(err.message )
-    } else {
-        res.status(500).json(err.message)
-    }
-}
+let errorHandler = (error, req, res, next) => {
+    res.status(error.status).send(error.message);
+};
 
-export default errorHandler
+export default errorHandler;

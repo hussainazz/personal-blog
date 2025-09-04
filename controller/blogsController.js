@@ -25,16 +25,14 @@ function writeFile() {
 
 // GET /api/home
 let getAllBlogs = (req, res, next) => {
-    res.status(200).json(blogs);
-    res.end();
+    res.send(blogs);
     next();
 };
 
 // GET /home
 let renderAllBlogs = (req, res, next) => {
-
     res.render("./home/index", {
-        blogList: blogs
+        blogList: blogs,
     });
 };
 
@@ -46,6 +44,7 @@ let renderOneBlog = (req, res, next) => {
         let error = new Error(`Can't find blog with id: ${id}.`);
         error.status = 404;
         next(error);
+        return;
     }
     res.render("./article/index", {
         title: blog.title,
@@ -59,17 +58,15 @@ let createBlog = (req, res, next) => {
     let newId = blogs.length + 1;
     let title = req.body.title;
     let article = req.body.article;
-
     if (newId === blogs.length) {
         newId++;
     }
-
     if (!title) {
         let error = new Error("You should include a title.");
         error.status = 400;
         next(error);
+        return;
     }
-
     let newArticle = {
         id: newId,
         title: title,
@@ -87,13 +84,12 @@ let editBlog = (req, res, next) => {
     let newTitle = req.body.title;
     let newArticle = req.body.article;
     let articleToUpdate = blogs.find((article) => article.id == id);
-
     if (!articleToUpdate) {
         let error = new Error(`article with id: ${id} not found.`);
         error.status = 404;
         next(error);
+        return;
     }
-
     blogs.find((blog) => blog.id == id)["title"] = newTitle;
     blogs.find((blog) => blog.id == id)["article"] = newArticle;
     writeFile();
@@ -104,13 +100,12 @@ let editBlog = (req, res, next) => {
 let deleteBlog = (req, res, next) => {
     let id = req.params.id;
     let articleToDelete = blogs.find((article) => article.id == id);
-
     if (!articleToDelete) {
         let error = new Error(`article with id: ${id} not found.`);
         error.status = 404;
         next(error);
+        return;
     }
-
     blogs = blogs.filter((article) => article.id != id);
     writeFile();
     res.end();
@@ -120,14 +115,12 @@ let deleteBlog = (req, res, next) => {
 let renderEditForm = (req, res, next) => {
     let id = req.params.id;
     let blogToEdit = blogs.find((blog) => blog.id == id);
-
     if (!blogToEdit) {
         let error = new Error(`Can't find blogs with id: ${id}`);
         error.status = 404;
         next(error);
         return;
     }
-
     res.render("./edit/index", {
         id: id,
         title: blogToEdit.title,
